@@ -5,7 +5,7 @@ import {
     parseBody,
     isPositiveInteger,
     getSettings
-} from "../_shared.js";
+}  from "./_shared.js";
 
 export async function onRequestPost(context) {
     try {
