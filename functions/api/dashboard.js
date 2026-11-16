@@ -2,7 +2,7 @@ import {
     json,
     error,
     getSettings
-} } from "./_shared.js";
+}  from "./_shared.js";
 
 export async function onRequestGet(context) {
     try {
