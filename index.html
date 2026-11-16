@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#090b10">
+    <title>Vinagrete ERP</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-icon">V</div>
+                <div>
+                    <h1>VINAGRETE</h1>
+                    <span>ERP SYSTEM</span>
+                </div>
+            </div>
+
+            <div class="sidebar-label">MENU PRINCIPAL</div>
+
+            <nav class="navigation">
+                <button class="nav-item active" data-page="dashboard">
+                    <span class="nav-icon">▦</span>
+                    Dashboard
+                </button>
+                <button class="nav-item" data-page="operations">
+                    <span class="nav-icon">⇄</span>
+                    Operações
+                </button>
+                <button class="nav-item" data-page="history">
+                    <span class="nav-icon">◷</span>
+                    Histórico
+                </button>
+                <button class="nav-item" data-page="settings">
+                    <span class="nav-icon">⚙</span>
+                    Configurações
+                </button>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="connection-indicator">
+                    <span class="status-dot"></span>
+                    <div>
+                        <strong>Sistema conectado</strong>
+                        <small>Banco de dados online</small>
+                    </div>
+                </div>
+                <div class="sidebar-version">VINAGRETE ERP · v1.0</div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menu">☰</button>
+                    <div>
+                        <div class="breadcrumb">SISTEMA / <span id="breadcrumbPage">DASHBOARD</span></div>
+                        <h2 id="pageTitle">Dashboard</h2>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="live-indicator">
+                        <span class="status-dot"></span>
+                        Sincronizado
+                    </div>
+                    <div class="user-avatar">ERP</div>
+                </div>
+            </header>
+
+            <div class="page-container">
+
+                <!-- DASHBOARD -->
+                <section class="page active" id="page-dashboard">
+                    <div class="welcome-row">
+                        <div>
+                            <p class="eyebrow">VISÃO GERAL DA OPERAÇÃO</p>
+                            <h3>Visão geral</h3>
+                            <p class="muted">Acompanhe seu estoque e suas movimentações.</p>
+                        </div>
+                        <button class="button button-secondary" id="refreshDashboard">
+                            ↻ Atualizar dados
+                        </button>
+                    </div>
+
+                    <div class="stats-grid">
+                        <article class="stat-card">
+                            <div class="stat-top">
+                                <span class="stat-label">ESTOQUE ATUAL</span>
+                                <span class="stat-icon purple">▣</span>
+                            </div>
+                            <div class="stat-value" id="stockBoxes">0</div>
+                            <div class="stat-description" id="stockUnits">0 unidades no total</div>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-top">
+                                <span class="stat-label">TOTAL COMPRADO</span>
+                                <span class="stat-icon blue">↙</span>
+                            </div>
+                            <div class="stat-value" id="totalPurchased">R$ 0,00</div>
+                            <div class="stat-description">Valor acumulado das compras</div>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-top">
+                                <span class="stat-label">TOTAL PAGO</span>
+                                <span class="stat-icon green">✓</span>
+                            </div>
+                            <div class="stat-value" id="totalPaid">R$ 0,00</div>
+                            <div class="stat-description">Pagamentos registrados</div>
+                        </article>
+
+                        <article class="stat-card highlight-card">
+                            <div class="stat-top">
+                                <span class="stat-label">VALOR EM ABERTO</span>
+                                <span class="stat-icon orange">◷</span>
+                            </div>
+                            <div class="stat-value" id="openBalance">R$ 0,00</div>
+                            <div class="stat-description">Saldo pendente de pagamento</div>
+                        </article>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <section class="panel">
+                            <div class="panel-heading">
+                                <div>
+                                    <h3>Movimentações recentes</h3>
+                                    <p>Últimas atividades registradas no sistema</p>
+                                </div>
+                                <button class="text-button" data-goto="history">Ver histórico →</button>
+                            </div>
+                            <div id="recentTransactions" class="recent-list">
+                                <div class="loading-state">Carregando movimentações...</div>
+                            </div>
+                        </section>
+
+                        <section class="panel product-panel">
+                            <div class="panel-heading">
+                                <div>
+                                    <h3>Produto cadastrado</h3>
+                                    <p>Informações da caixa</p>
+                                </div>
+                                <span class="product-tag">ATIVO</span>
+                            </div>
+
+                            <div class="product-symbol">▣</div>
+                            <h4 id="productNameDisplay">Caixa de vinagrete</h4>
+                            <p class="muted">Produto principal da operação</p>
+
+                            <div class="product-detail">
+                                <span>Unidades por caixa</span>
+                                <strong id="unitsPerBoxDisplay">15 unidades</strong>
+                            </div>
+                            <div class="product-detail">
+                                <span>Preço padrão de compra</span>
+                                <strong id="defaultPriceDisplay">R$ 0,00</strong>
+                            </div>
+                            <button class="button button-secondary full-button" data-goto="settings">
+                                Editar produto e preço
+                            </button>
+                        </section>
+                    </div>
+                </section>
+
+                <!-- OPERAÇÕES -->
+                <section class="page" id="page-operations">
+                    <div class="section-intro">
+                        <p class="eyebrow">CONTROLE DE ESTOQUE E FINANCEIRO</p>
+                        <h3>Operações</h3>
+                        <p class="muted">Registre compras, vendas e pagamentos.</p>
+                    </div>
+
+                    <div class="operation-grid">
+                        <article class="operation-card">
+                            <div class="operation-heading">
+                                <div class="operation-icon purchase-icon">＋</div>
+                                <div>
+                                    <h3>Adicionar estoque</h3>
+                                    <p>Registrar compra de caixas</p>
+                                </div>
+                            </div>
+
+                            <form id="purchaseForm">
+                                <label for="purchaseBoxes">Quantidade de caixas</label>
+                                <input type="number" id="purchaseBoxes" min="1" step="1" placeholder="Ex.: 10" required>
+                                <div class="form-info">
+                                    <span>Preço por caixa</span>
+                                    <strong id="purchaseUnitPrice">R$ 0,00</strong>
+                                </div>
+                                <div class="form-total">
+                                    <span>Total da compra</span>
+                                    <strong id="purchaseTotal">R$ 0,00</strong>
+                                </div>
+                                <button class="button button-primary full-button" type="submit">
+                                    Registrar compra
+                                </button>
+                            </form>
+                        </article>
+
+                        <article class="operation-card">
+                            <div class="operation-heading">
+                                <div class="operation-icon sale-icon">↗</div>
+                                <div>
+                                    <h3>Retirar estoque</h3>
+                                    <p>Registrar caixas vendidas</p>
+                                </div>
+                            </div>
+
+                            <form id="saleForm">
+                                <label for="saleBoxes">Quantidade de caixas</label>
+                                <input type="number" id="saleBoxes" min="1" step="1" placeholder="Ex.: 3" required>
+                                <div class="form-info">
+                                    <span>Estoque disponível</span>
+                                    <strong id="availableStock">0 caixas</strong>
+                                </div>
+                                <div class="form-total neutral-total">
+                                    <span>Quantidade retirada</span>
+                                    <strong id="saleUnitsPreview">0 unidades</strong>
+                                </div>
+                                <button class="button button-primary full-button" type="submit">
+                                    Registrar saída
+                                </button>
+                            </form>
+                        </article>
+
+                        <article class="operation-card payment-card">
+                            <div class="operation-heading">
+                                <div class="operation-icon payment-icon">R$</div>
+                                <div>
+                                    <h3>Registrar pagamento</h3>
+                                    <p>Abater valores em aberto</p>
+                                </div>
+                            </div>
+
+                            <form id="paymentForm">
+                                <label for="paymentAmount">Valor pago (R$)</label>
+                                <input type="text" id="paymentAmount" inputmode="decimal" placeholder="Ex.: 250,00" required>
+                                <div class="form-info">
+                                    <span>Saldo em aberto</span>
+                                    <strong id="availableDebt">R$ 0,00</strong>
+                                </div>
+                                <div class="form-total neutral-total">
+                                    <span>Valor do pagamento</span>
+                                    <strong id="paymentPreview">R$ 0,00</strong>
+                                </div>
+                                <button class="button button-primary full-button" type="submit">
+                                    Registrar pagamento
+                                </button>
+                            </form>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- HISTÓRICO -->
+                <section class="page" id="page-history">
+                    <div class="section-intro">
+                        <p class="eyebrow">REGISTROS DO SISTEMA</p>
+                        <h3>Histórico de movimentações</h3>
+                        <p class="muted">Todas as compras, vendas e pagamentos registrados.</p>
+                    </div>
+
+                    <section class="panel history-panel">
+                        <div class="history-toolbar">
+                            <div>
+                                <h3>Registros</h3>
+                                <p>As datas e os horários são registrados automaticamente.</p>
+                            </div>
+                            <select id="historyFilter" class="filter-select">
+                                <option value="all">Todas as operações</option>
+                                <option value="purchase">Compras</option>
+                                <option value="sale">Vendas</option>
+                                <option value="payment">Pagamentos</option>
+                            </select>
+                        </div>
+
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>OPERAÇÃO</th>
+                                        <th>DATA E HORA</th>
+                                        <th>QUANTIDADE</th>
+                                        <th>VALOR</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="historyTableBody">
+                                    <tr>
+                                        <td colspan="4" class="empty-cell">Carregando histórico...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- CONFIGURAÇÕES -->
+                <section class="page" id="page-settings">
+                    <div class="section-intro">
+                        <p class="eyebrow">PERSONALIZAÇÃO DO SISTEMA</p>
+                        <h3>Configurações</h3>
+                        <p class="muted">Defina o produto e o preço padrão de compra.</p>
+                    </div>
+
+                    <section class="panel settings-panel">
+                        <div class="panel-heading">
+                            <div>
+                                <h3>Dados do produto</h3>
+                                <p>Essas informações serão utilizadas nas próximas compras.</p>
+                            </div>
+                            <span class="settings-icon">⚙</span>
+                        </div>
+
+                        <form id="settingsForm" class="settings-form">
+                            <div class="field-group">
+                                <label for="productName">Nome do produto</label>
+                                <input type="text" id="productName" maxlength="80" placeholder="Ex.: Caixa de vinagrete" required>
+                            </div>
+
+                            <div class="field-group">
+                                <label for="defaultPrice">Preço padrão por caixa (R$)</label>
+                                <input type="text" id="defaultPrice" inputmode="decimal" placeholder="Ex.: 45,00" required>
+                                <small>O novo preço será aplicado somente às compras futuras. As compras antigas manterão seus valores registrados.</small>
+                            </div>
+
+                            <div class="field-group">
+                                <label>Unidades por caixa</label>
+                                <input type="text" value="15 unidades" disabled>
+                                <small>Configuração fixa do produto.</small>
+                            </div>
+
+                            <button class="button button-primary" type="submit">Salvar configurações</button>
+                        </form>
+                    </section>
+
+                    <div class="warning-note">
+                        <strong>Importante</strong>
+                        <p>Alterar o preço padrão não modifica compras anteriores nem o saldo já registrado em aberto.</p>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="modal-backdrop" id="confirmModal">
+        <div class="modal">
+            <div class="modal-icon" id="modalIcon">✓</div>
+            <h3 id="modalTitle">Confirmar operação</h3>
+            <p id="modalMessage">Deseja continuar?</p>
+            <div class="modal-actions">
+                <button class="button button-secondary" id="modalCancel">Cancelar</button>
+                <button class="button button-primary" id="modalConfirm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>
